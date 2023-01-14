@@ -38,33 +38,36 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    if (trajectory==null) return null;
+    if (trajectory == null)
+      return null;
 
     // Run path following command, then stop at the end.
     return driveController.getAutonomousCommand(trajectory);
   }
 
   public void teleOp() {
-    teleController.checkController();
-    if (teleController.isMoveRoboButtonPressed()) {
-      driveController.move(teleController.getSpeed(), teleController.getRotation());
+    if (teleController.shouldRoboMove()) {
+      double speed = teleController.getSpeed();
+      double rotation = teleController.getRotation();
+      if ((speed>0) || (rotation!=0))
+        driveController.move(speed, rotation);
     } else {
       driveController.stop();
     }
 
-    if (teleController.isMoveArmButtonPressed()) {
-      double amt = teleController.getArmMovementAmount();
-      if (amt>0)
-        armController.retractArm(amt);
-      else
-        armController.extendArm(-amt);
+    if (teleController.shouldArmMove()) {
+      double mag = teleController.getArmMovementMagnitude();
+      if (mag>0)
+        armController.extendArm(mag);
+      else if (mag<0)
+        armController.retractArm(-mag);
     }
 
-    if (teleController.isopenArmButtonPressed()) {
+    if (teleController.shouldArmOpen()) {
       armController.openArm(10);
     }
 
-    if (teleController.iscloseArmButtonPressed()) {
+    if (teleController.shouldArmClose()) {
       armController.openArm(10);
     }
   }

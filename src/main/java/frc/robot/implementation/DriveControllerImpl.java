@@ -58,6 +58,6 @@ public class DriveControllerImpl implements DriveController {
     @Override
     public void move(double distance, double speed, double rotation) {
         // TODO Auto-generated method stub
-        
+        System.out.println("move:"+distance);
     }
 }

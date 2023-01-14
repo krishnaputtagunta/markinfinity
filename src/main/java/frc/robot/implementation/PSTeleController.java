@@ -8,10 +8,6 @@ import frc.robot.interfaces.TeleController;
  */
 public class PSTeleController implements TeleController {
   private PS4Controller ps4c;
-  private boolean l1ButtonPressed = false;
-  private boolean r1ButtonPressed = false;
-  private boolean circleButtonPressed = false;
-  private boolean squareButtonPressed = false;
   
   public PSTeleController(int port) {
     ps4c = new PS4Controller(0);
@@ -19,66 +15,39 @@ public class PSTeleController implements TeleController {
 
   @Override
   public double getRotation() {
-    return ps4c.getRawAxis(2);
+    double rotation = ps4c.getRawAxis(2);
+    return rotation>0.01?rotation:0;
   }
 
   @Override
   public double getSpeed() {
-    return -1.0 * ps4c.getRawAxis(1);
+    double speed = -ps4c.getRawAxis(1);
+    return speed>.01?speed:0;
   }
 
   @Override
-  public double getArmMovementAmount() {
+  public double getArmMovementMagnitude() {
     double val = ps4c.getRawAxis(1);
-    return val;
+    return -val;
   }
 
   @Override
-  public boolean isMoveRoboButtonPressed() {
-    return l1ButtonPressed;
+  public boolean shouldRoboMove() {
+    return ps4c.getL1Button();
   }
 
   @Override
-  public boolean isMoveArmButtonPressed() {
-    return r1ButtonPressed;
+  public boolean shouldArmMove() {
+    return ps4c.getR1Button();
   }
 
   @Override
-  public boolean isopenArmButtonPressed() {
-    return circleButtonPressed;
+  public boolean shouldArmOpen() {
+    return ps4c.getCircleButton();
   }
 
   @Override
-  public boolean iscloseArmButtonPressed() {
-    return squareButtonPressed;
-  }
-
-  @Override
-  public void checkController() {
-    if (ps4c.getL1Button()) {
-      if (!l1ButtonPressed) {
-        System.out.println("L1buttonPressed is true");
-        l1ButtonPressed = true;
-      }
-    } else if (l1ButtonPressed) {
-      System.out.println("L1buttonPressed is false");
-      l1ButtonPressed = false;
-    }
-    if (ps4c.getR1Button()) {
-      if (!r1ButtonPressed) {
-        System.out.println("R1buttonPressed is true");
-        r1ButtonPressed = true;
-      }
-    } else if (r1ButtonPressed) {
-      System.out.println("R1buttonPressed is false");
-      r1ButtonPressed = false;
-    }
-    if (ps4c.getCircleButton()) {
-      System.out.println("CirclebuttonPressed is true");
-      circleButtonPressed = true;
-    } if (circleButtonPressed) {
-      System.out.println("CirclebuttonPressed is true");
-      circleButtonPressed = false;
-    }
+  public boolean shouldArmClose() {
+    return false;
   }
 }
