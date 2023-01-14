@@ -1,9 +1,10 @@
 package frc.robot.interfaces;
 
 public interface ArmController {
-    public void closeArm(int percent);
-    public void lift(int deg);
-    public void openArm(int percent);
-    public void extendArm(int percent);
-    public void retractArm(int percent);
+    public void closeArm(double magnitude);
+    public void openArm(double magnitude);
+    public void liftArm(double magnitude);
+    public void lowerArm(double magnitude);
+    public void extendArm(double magnitude);
+    public void retractArm(double magnitude);
 }

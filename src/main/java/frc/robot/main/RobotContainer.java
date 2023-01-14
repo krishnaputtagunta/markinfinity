@@ -2,6 +2,7 @@ package frc.robot.main;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.implementation.ArmControllerImpl;
 import frc.robot.implementation.DriveControllerImpl;
 import frc.robot.implementation.PSTeleController;
 import frc.robot.interfaces.ArmController;
@@ -21,7 +22,7 @@ import frc.robot.main.Constants.*;
 public class RobotContainer {
   private TeleController teleController = new PSTeleController(IOConstants.psDriverControllerPort);
   private DriveController driveController = new DriveControllerImpl();
-  private ArmController armController = null;
+  private ArmController armController = new ArmControllerImpl();
   Trajectory trajectory;
 
   /**
@@ -45,10 +46,26 @@ public class RobotContainer {
 
   public void teleOp() {
     teleController.checkController();
-    if (teleController.isMoveButtonPressed()) {
+    if (teleController.isMoveRoboButtonPressed()) {
       driveController.move(teleController.getSpeed(), teleController.getRotation());
     } else {
       driveController.stop();
+    }
+
+    if (teleController.isMoveArmButtonPressed()) {
+      double amt = teleController.getArmMovementAmount();
+      if (amt>0)
+        armController.retractArm(amt);
+      else
+        armController.extendArm(-amt);
+    }
+
+    if (teleController.isopenArmButtonPressed()) {
+      armController.openArm(10);
+    }
+
+    if (teleController.iscloseArmButtonPressed()) {
+      armController.openArm(10);
     }
   }
 }
