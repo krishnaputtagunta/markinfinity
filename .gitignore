@@ -11,6 +11,8 @@
 release/
 build/
 .gradle/
+simgui*
+.vscode/*
 
 # BlueJ files
 *.ctxt
