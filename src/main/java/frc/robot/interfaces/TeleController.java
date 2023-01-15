@@ -15,6 +15,7 @@ public interface TeleController {
 
     public boolean shouldArmClose();
 
+    public double getArmLiftMagnitude();
     /*
     * @return value between -1 and 1. percent speed of robo.. 1 means max speed in forward direction.. 
     * Negative implies move in reverse
@@ -22,4 +23,6 @@ public interface TeleController {
     public double getSpeed();
 
     public double getRotation();
+
+    
 }

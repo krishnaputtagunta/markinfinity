@@ -16,6 +16,7 @@ public class PSTeleController implements TeleController {
   @Override
   public double getRotation() {
     double rotation = ps4c.getRawAxis(2);
+    
     return rotation>0.01?rotation:0;
   }
 
@@ -40,6 +41,12 @@ public class PSTeleController implements TeleController {
   public boolean shouldArmMove() {
     return ps4c.getR1Button();
   }
+
+  public double getArmLiftMagnitude() {
+    double lift = ps4c.getRawAxis(2);
+    return -lift;
+  }
+ 
 
   @Override
   public boolean shouldArmOpen() {

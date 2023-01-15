@@ -23,26 +23,11 @@ public class RobotContainer {
   private TeleController teleController = new PSTeleController(IOConstants.psDriverControllerPort);
   private DriveController driveController = new DriveControllerImpl();
   private ArmController armController = new ArmControllerImpl();
-  Trajectory trajectory;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer(Trajectory trajectory) {
-    this.trajectory = trajectory;
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    if (trajectory == null)
-      return null;
-
-    // Run path following command, then stop at the end.
-    return driveController.getAutonomousCommand(trajectory);
+  public RobotContainer() {
   }
 
   public void teleOp() {
@@ -57,10 +42,18 @@ public class RobotContainer {
 
     if (teleController.shouldArmMove()) {
       double mag = teleController.getArmMovementMagnitude();
+      double lift = teleController.getArmLiftMagnitude();
       if (mag>0)
         armController.extendArm(mag);
       else if (mag<0)
         armController.retractArm(-mag);
+      if (lift > 0) {
+        armController.liftArm(lift);
+      }
+      else if (lift < 0) {
+        armController.lowerArm(-lift);
+      }
+      
     }
 
     if (teleController.shouldArmOpen()) {
@@ -70,5 +63,9 @@ public class RobotContainer {
     if (teleController.shouldArmClose()) {
       armController.openArm(10);
     }
-  }
+
+    
+    
+    
+  } 
 }
