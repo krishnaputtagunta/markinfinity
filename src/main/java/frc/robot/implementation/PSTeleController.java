@@ -14,6 +14,11 @@ public class PSTeleController implements TeleController {
   }
 
   @Override
+  public String getControllerType() {
+    return "PS4";
+  }
+
+  @Override
   public double getRotation() {
     double rotation = ps4c.getRawAxis(2);
     return rotation;
@@ -26,7 +31,7 @@ public class PSTeleController implements TeleController {
   }
 
   @Override
-  public double getArmMovementMagnitude() {
+  public double getArmExtensionMagnitude() {
     double val = ps4c.getRawAxis(1);
     return -val;
   }

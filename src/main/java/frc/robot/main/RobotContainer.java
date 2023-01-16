@@ -27,36 +27,36 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    if ("PS4".equals(IOConstants.teleControllerType))
-      teleController = new XboxTeleController(IOConstants.psDriverControllerPort);
+    if ("PS4".equalsIgnoreCase(IOConstants.teleControllerType))
+      teleController = new PSTeleController(IOConstants.psDriverControllerPort);
     else
-      teleController = new XboxTeleController(IOConstants.psDriverControllerPort);
+      teleController = new XboxTeleController(IOConstants.xbDriverControllerPort);
+    System.out.println("Using "+teleController.getControllerType()+" telecontroller");
   }
 
   public void teleOp() {
     if (teleController.shouldRoboMove()) {
       double speed = teleController.getSpeed();
       double rotation = teleController.getRotation();
-      if ((speed>0) || (rotation!=0))
+      if ((Math.abs(speed)>0.01) || (Math.abs(rotation)>0.01))
         driveController.move(speed, rotation);
     } else {
       driveController.stop();
     }
 
     if (teleController.shouldArmMove()) {
-      double mag = teleController.getArmMovementMagnitude();
-      double lift = teleController.getArmLiftMagnitude();
-      if (mag>0)
-        armController.extendArm(mag);
-      else if (mag<0)
-        armController.retractArm(-mag);
-      if (lift > 0) {
-        armController.liftArm(lift);
-      }
-      else if (lift < 0) {
-        armController.lowerArm(-lift);
-      }
+      double extendMagnitude = teleController.getArmExtensionMagnitude();
+      double liftMagnitude = teleController.getArmLiftMagnitude();
+      if (extendMagnitude > 0.01)
+        armController.extendArm(extendMagnitude);
+      else if (extendMagnitude < -0.01)
+        armController.retractArm(-extendMagnitude);
       
+       if (liftMagnitude > 0.01)
+        armController.liftArm(liftMagnitude);
+      else if (liftMagnitude < -0.01) {
+        armController.lowerArm(-liftMagnitude);
+      }
     }
 
     if (teleController.shouldArmOpen()) {
@@ -64,11 +64,7 @@ public class RobotContainer {
     }
 
     if (teleController.shouldArmClose()) {
-      armController.openArm(10);
+      armController.closeArm(10);
     }
-
-    
-    
-    
   } 
 }

@@ -2,6 +2,8 @@ package frc.robot.interfaces;
 
 public interface TeleController {
     
+    public String getControllerType();
+
     public boolean shouldArmMove();
 
     public boolean shouldRoboMove();
@@ -9,7 +11,7 @@ public interface TeleController {
     /*
     * @return amount by which arm should move.. Positive implies extend and negative implies retract
     */
-    public double getArmMovementMagnitude();
+    public double getArmExtensionMagnitude();
 
     public boolean shouldArmOpen();
 

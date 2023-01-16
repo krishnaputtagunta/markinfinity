@@ -14,6 +14,11 @@ public class XboxTeleController implements TeleController {
   }
 
   @Override
+  public String getControllerType() {
+    return "Xbox";
+  }
+
+  @Override
   public double getRotation() {
     double rotation = xbc.getRawAxis(5);
     
@@ -27,7 +32,7 @@ public class XboxTeleController implements TeleController {
   }
 
   @Override
-  public double getArmMovementMagnitude() {
+  public double getArmExtensionMagnitude() {
     double val = xbc.getRawAxis(1);
     return -val;
   }
