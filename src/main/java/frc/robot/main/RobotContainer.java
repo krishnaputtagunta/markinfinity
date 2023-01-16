@@ -1,10 +1,9 @@
 package frc.robot.main;
 
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.implementation.ArmControllerImpl;
 import frc.robot.implementation.DriveControllerImpl;
 import frc.robot.implementation.PSTeleController;
+import frc.robot.implementation.XboxTeleController;
 import frc.robot.interfaces.ArmController;
 import frc.robot.interfaces.DriveController;
 import frc.robot.interfaces.TeleController;
@@ -20,7 +19,7 @@ import frc.robot.main.Constants.*;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private TeleController teleController = new PSTeleController(IOConstants.psDriverControllerPort);
+  private TeleController teleController;
   private DriveController driveController = new DriveControllerImpl();
   private ArmController armController = new ArmControllerImpl();
 
@@ -28,6 +27,10 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    if ("PS4".equals(IOConstants.teleControllerType))
+      teleController = new XboxTeleController(IOConstants.psDriverControllerPort);
+    else
+      teleController = new XboxTeleController(IOConstants.psDriverControllerPort);
   }
 
   public void teleOp() {

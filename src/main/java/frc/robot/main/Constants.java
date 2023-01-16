@@ -50,6 +50,7 @@ public final class Constants {
 
   public static final class IOConstants {
     public static final int psDriverControllerPort = 0;
+    public static String teleControllerType = "Xbox"; //"PS4"
   }
 
   public static final class AutoConstants {

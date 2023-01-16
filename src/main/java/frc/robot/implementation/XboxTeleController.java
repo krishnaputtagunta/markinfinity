@@ -1,55 +1,55 @@
 package frc.robot.implementation;
 
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.interfaces.TeleController;
 
 /*
  * Uses PS4 controller to get speed and rotation based on button press and joy stick axis
  */
-public class PSTeleController implements TeleController {
-  private PS4Controller ps4c;
+public class XboxTeleController implements TeleController {
+  private XboxController xbc;
   
-  public PSTeleController(int port) {
-    ps4c = new PS4Controller(0);
+  public XboxTeleController(int port) {
+    xbc = new XboxController(0);
   }
 
   @Override
   public double getRotation() {
-    double rotation = ps4c.getRawAxis(2);
+    double rotation = xbc.getRawAxis(5);
+    
     return rotation;
   }
 
   @Override
   public double getSpeed() {
-    double speed = -ps4c.getRawAxis(1);
+    double speed = -xbc.getRawAxis(1);
     return speed;
   }
 
   @Override
   public double getArmMovementMagnitude() {
-    double val = ps4c.getRawAxis(1);
+    double val = xbc.getRawAxis(1);
     return -val;
   }
 
   @Override
   public boolean shouldRoboMove() {
-    return ps4c.getL1Button();
+    return xbc.getRightBumper();
   }
 
   @Override
   public boolean shouldArmMove() {
-    return ps4c.getR1Button();
+    return xbc.getLeftBumper();
   }
 
   public double getArmLiftMagnitude() {
-    double lift = ps4c.getRawAxis(2);
+    double lift = xbc.getRawAxis(5);
     return -lift;
   }
- 
 
   @Override
   public boolean shouldArmOpen() {
-    return ps4c.getCircleButton();
+    return xbc.getBButton();
   }
 
   @Override
