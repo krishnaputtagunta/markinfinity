@@ -4,6 +4,16 @@
 # Log file
 *.log
 
+# lib
+*.dll
+
+# relese
+release/
+build/
+.gradle/
+simgui*
+.vscode/*
+
 # BlueJ files
 *.ctxt
 
