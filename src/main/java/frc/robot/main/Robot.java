@@ -4,6 +4,8 @@
 
 package frc.robot.main;
 
+import java.util.Date;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -14,7 +16,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
-
+  Date autonomousStartTime;
+  boolean autonomousComplete;
+  Date testStartTime = null;
   boolean moving = false;
   boolean rotating = false;
 
@@ -47,12 +51,26 @@ public class Robot extends TimedRobot {
   /** This function is run once each time the robot enters autonomous mode. */
   @Override
   public void autonomousInit() {
-    System.out.println("Autonomous initialized");
+    autonomousComplete = false;
+    autonomousStartTime = null;
+    System.out.println("AutonomousInit.");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    if (autonomousComplete) return;
+    Date currentTime = new Date();
+    long difference = 0;
+    if (autonomousStartTime==null) 
+      autonomousStartTime = currentTime;
+    else
+      difference = currentTime.getTime()-autonomousStartTime.getTime();
+    System.out.println("Elapsed time: "+difference);
+    if (!robotContainer.autonomousOp(difference)) {
+      System.out.println("Autonomous completed in "+difference+" millisec!");
+      autonomousComplete = true;
+    }
   }
 
   /**
@@ -73,12 +91,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    System.out.println("Test initialized");
+    testStartTime = new Date();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    Date currentTime = new Date();
+    long difference = currentTime.getTime()-autonomousStartTime.getTime();
+    System.out.println("Elapsed time in test: "+difference);
+    if (!robotContainer.calibrate(difference)) {
+      System.out.println("Autonomous complete!");
+      autonomousStartTime=null;
+    }
   }
 }

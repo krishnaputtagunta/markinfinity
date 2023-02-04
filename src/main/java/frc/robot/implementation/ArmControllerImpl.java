@@ -4,6 +4,9 @@ import frc.robot.interfaces.ArmController;
 
 public class ArmControllerImpl implements ArmController {
 
+   // LiftSubsystem lift;
+    //ClawSubsystem claw;
+
     @Override
     public void closeArm(double magnitude) {
         // TODO Auto-generated method stub
@@ -21,6 +24,7 @@ public class ArmControllerImpl implements ArmController {
     public void liftArm(double magnitude) {
         // TODO Auto-generated method stub
         System.out.println("liftArm:"+magnitude);
+       // liftSubsystem.lift(magnitude);
     }
 
     @Override

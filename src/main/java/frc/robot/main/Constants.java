@@ -18,8 +18,8 @@ public final class Constants {
     public static final int TalonDevNumRt = 1;
     public static final int TalonDevNumLt = 8;
     public static final int VictorDevNumRt = 3;
-    public static final int VictorDevNumLt = 15;
-
+    public static final int VictorDevNumLt = 10;
+    public static final double maxSpeed = 0.5;
     public static final int[] kLeftEncoderPorts = new int[] { 0, 1 };
     public static final int[] kRightEncoderPorts = new int[] { 2, 3 };
     public static final boolean kLeftEncoderReversed = false;

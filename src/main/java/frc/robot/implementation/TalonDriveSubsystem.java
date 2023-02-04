@@ -17,8 +17,8 @@ public class TalonDriveSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_rightDrive1 = new WPI_TalonSRX(DriveConstants.TalonDevNumRt);
     private final WPI_VictorSPX m_rightDrive2 = new WPI_VictorSPX(DriveConstants.VictorDevNumRt);
 
-    private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightDrive2, m_rightDrive1);
-    private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftDrive2, m_leftDrive1);
+    private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightDrive1); // m_rightDrive2);
+    private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftDrive1);// m_leftDrive2);
 
     private final DifferentialDrive robotDrive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
