@@ -53,12 +53,12 @@ public class PSTeleController implements TeleController {
  
 
   @Override
-  public boolean shouldArmOpen() {
+  public boolean shouldGrab() {
     return ps4c.getCircleButton();
   }
 
   @Override
-  public boolean shouldArmClose() {
+  public boolean shouldRelease() {
     return false;
   }
 }

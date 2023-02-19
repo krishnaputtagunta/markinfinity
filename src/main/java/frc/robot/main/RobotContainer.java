@@ -1,7 +1,5 @@
 package frc.robot.main;
 
-import java.util.Iterator;
-
 import frc.robot.implementation.ArmControllerImpl;
 import frc.robot.implementation.AutonomousControllerImpl;
 import frc.robot.implementation.DriveControllerImpl;
@@ -26,8 +24,8 @@ public class RobotContainer {
   private AutonomousController autonomousController = new AutonomousControllerImpl();
   Pair lastAction = null;
 
-  String[] autoOp = { "Move 48" };
-  String[] autoOp2 = { "Move 48", "Lift 24", "Xtnd 6", "Open 100", "Open -100", "Xtnd -6", "Lift -24", "Turn 90",
+  String[] autoOp = { "Move 48", "Lift -24", "Turn 90"};
+  String[] autoOp2 = { "Move 48", "Lift 24", "Xtnd 6", "Grab 100", "Grab -100", "Xtnd -6", "Lift -24", "Turn 90",
           "Move -6", "Turn -90", "Move -6" }; // Move 4ft
 
   /**
@@ -42,10 +40,35 @@ public class RobotContainer {
     autonomousController.setOperationList(autoOp);
   }
 
+  private void performAction(Pair chosenAction) {
+    switch (chosenAction.type) {
+      case "Lift":
+        armController.liftArm(chosenAction.p1);
+        break;
+      case "Grab":
+        armController.grab(chosenAction.p1);
+        break;
+      case "Xtnd":
+        armController.extendArm(chosenAction.p1);
+      case "Turn":
+        driveController.move(0, chosenAction.p1);
+        break;
+      case "Move":
+        driveController.move(chosenAction.p1, 0);
+        break;
+      case "Stop":
+        driveController.stop();
+        break;
+      default:
+        System.out.print("Skipping "+chosenAction.type);
+    }
+  }
+
   /*
    * Returns true if more autonomous operations are left.. false if all operations have been completed
    */
   public boolean autonomousOp(long timeInAutonomous) {
+    // Get the next operation to perform and magnitude (e.g <Move, 0.5> - meaning move at 50% speed)
     Pair chosenAction = autonomousController.getNextAction(timeInAutonomous);
 
     if (chosenAction!=null) {
@@ -53,20 +76,20 @@ public class RobotContainer {
         System.out.println("Chosen action at time:"+timeInAutonomous+" is "+chosenAction);
         lastAction = chosenAction;
       }
-      if (chosenAction.type.equals("Move"))
-        driveController.move(chosenAction.p1, 0);
-      else
-        driveController.move(0, chosenAction.p1);
+      performAction(chosenAction);
       return true;
     } else {
       return false;
     }
   }
 
-  public boolean calibrate(long timeInTest) {
-    Pair chosenAction = autonomousController.calibrate(timeInTest);
-    if (chosenAction!=null) return true;
-    else return false;
+  
+  public boolean calibrate(int testCount, long timeInTest) {
+    Pair chosenAction = autonomousController.calibrate(testCount, timeInTest);
+    if (chosenAction!=null) {
+      if (chosenAction.type!=null) performAction(chosenAction);
+      return true;
+    } else return false;
   }
 
   public void teleOp() {
@@ -94,12 +117,12 @@ public class RobotContainer {
       }
     }
 
-    if (teleController.shouldArmOpen()) {
-      armController.openArm(10);
+    if (teleController.shouldGrab()) {
+      armController.grab(10);
     }
 
-    if (teleController.shouldArmClose()) {
-      armController.closeArm(10);
+    if (teleController.shouldRelease()) {
+      armController.release(10);
     }
   } 
 }

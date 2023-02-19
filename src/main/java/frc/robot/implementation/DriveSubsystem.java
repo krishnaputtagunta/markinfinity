@@ -2,6 +2,8 @@ package frc.robot.implementation;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -11,11 +13,13 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.main.Constants.*;
 
-public class TalonDriveSubsystem extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_leftDrive1 = new WPI_TalonSRX(DriveConstants.TalonDevNumLt);
-    private final WPI_VictorSPX m_leftDrive2 = new WPI_VictorSPX(DriveConstants.VictorDevNumLt);
+    //private final WPI_VictorSPX m_leftDrive2 = new WPI_VictorSPX(DriveConstants.VictorDevNumLt);
     private final WPI_TalonSRX m_rightDrive1 = new WPI_TalonSRX(DriveConstants.TalonDevNumRt);
-    private final WPI_VictorSPX m_rightDrive2 = new WPI_VictorSPX(DriveConstants.VictorDevNumRt);
+   // private final WPI_VictorSPX m_rightDrive2 = new WPI_VictorSPX(DriveConstants.VictorDevNumRt);
+   // private final CANSparkMax driveLeftSpark = new CANSparkMax(1, MotorType.kBrushed);
+   // private final CANSparkMax driveRightSpark = new CANSparkMax(2, MotorType.kBrushed);
 
     private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightDrive1); // m_rightDrive2);
     private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftDrive1);// m_leftDrive2);
@@ -34,7 +38,7 @@ public class TalonDriveSubsystem extends SubsystemBase {
             DriveConstants.kRightEncoderPorts[1],
             DriveConstants.kRightEncoderReversed);
 
-    public TalonDriveSubsystem() {
+    public DriveSubsystem() {
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
@@ -105,5 +109,4 @@ public class TalonDriveSubsystem extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
       return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
     }
-  
 }
