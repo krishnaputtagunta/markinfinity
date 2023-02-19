@@ -13,9 +13,9 @@ public interface TeleController {
     */
     public double getArmExtensionMagnitude();
 
-    public boolean shouldArmOpen();
+    public boolean shouldGrab();
 
-    public boolean shouldArmClose();
+    public boolean shouldRelease();
 
     public double getArmLiftMagnitude();
     /*

@@ -4,31 +4,29 @@ import frc.robot.interfaces.DriveController;
 import frc.robot.main.Constants.DriveConstants;
 
 public class DriveControllerImpl implements DriveController {
-    private boolean moving = false;
-    private TalonDriveSubsystem driveSubsystem = new TalonDriveSubsystem();
+    private double currentSpeed = 0.0;
+    private double currentRotation = 0.0;
+    private DriveSubsystem driveSubsystem = new DriveSubsystem();
 
     @Override
     public void stop() {
-        if (moving) {
+        if ((currentSpeed!=0) || (currentRotation!=0)) {
+            currentSpeed = 0;
+            currentRotation = 0;
             driveSubsystem.stopMotor();
             System.out.println("Not moving");
-            moving = false;
         }
         driveSubsystem.arcadeDrive(0, 0);
     }
 
     @Override
     public void move(double speed, double rotation) {
-        if (speed>DriveConstants.maxSpeed)
-            speed = DriveConstants.maxSpeed;
-        System.out.println("Moving at speed:" + speed + ", rotation:" + rotation);
-        moving = true;
-        driveSubsystem.arcadeDrive(speed, rotation);
-    }
-
-    @Override
-    public void move(double distance, double speed, double rotation) {
-        // TODO Auto-generated method stub
-        System.out.println("move:"+distance);
+        if ((currentSpeed != speed) || (rotation!=currentRotation)) {
+            System.out.println("Moving at speed:" + speed + ", rotation:" + rotation);
+            currentSpeed = speed;
+            currentRotation = rotation;
+        }
+        double adjustedSpeed = (speed>DriveConstants.maxSpeed) ? DriveConstants.maxSpeed: speed;
+        driveSubsystem.arcadeDrive(adjustedSpeed, rotation);
     }
 }

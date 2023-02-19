@@ -53,12 +53,12 @@ public class XboxTeleController implements TeleController {
   }
 
   @Override
-  public boolean shouldArmOpen() {
+  public boolean shouldGrab() {
     return xbc.getBButton();
   }
 
   @Override
-  public boolean shouldArmClose() {
+  public boolean shouldRelease() {
     return false;
   }
 }

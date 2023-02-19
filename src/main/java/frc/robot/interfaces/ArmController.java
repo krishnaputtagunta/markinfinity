@@ -1,8 +1,8 @@
 package frc.robot.interfaces;
 
 public interface ArmController {
-    public void closeArm(double magnitude);
-    public void openArm(double magnitude);
+    public void grab(double magnitude);
+    public void release(double magnitude);
     public void liftArm(double magnitude);
     public void lowerArm(double magnitude);
     public void extendArm(double magnitude);

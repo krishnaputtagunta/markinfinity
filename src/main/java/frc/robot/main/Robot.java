@@ -18,7 +18,9 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   Date autonomousStartTime;
   boolean autonomousComplete;
+  boolean calibrateInProgress;
   Date testStartTime = null;
+  int testCount = 0;
   boolean moving = false;
   boolean rotating = false;
 
@@ -59,7 +61,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // Return immediately if robo has completed all operations in autonomous mode.
     if (autonomousComplete) return;
+    // Otherwise calculate the time the Robo has been in autonomous mode and invoke autonomousOp() in roboContainer
     Date currentTime = new Date();
     long difference = 0;
     if (autonomousStartTime==null) 
@@ -67,6 +71,7 @@ public class Robot extends TimedRobot {
     else
       difference = currentTime.getTime()-autonomousStartTime.getTime();
     System.out.println("Elapsed time: "+difference);
+    // If autonomousOp returns false, then all operations are done and autonomous mode is complete
     if (!robotContainer.autonomousOp(difference)) {
       System.out.println("Autonomous completed in "+difference+" millisec!");
       autonomousComplete = true;
@@ -91,19 +96,27 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    System.out.println("Test initialized");
-    testStartTime = new Date();
+    testCount++;
+    System.out.println("Calibrate initialized:"+testCount);
+    testStartTime = null;
+    calibrateInProgress = true;
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    if (!calibrateInProgress) return;
     Date currentTime = new Date();
-    long difference = currentTime.getTime()-autonomousStartTime.getTime();
-    System.out.println("Elapsed time in test: "+difference);
-    if (!robotContainer.calibrate(difference)) {
-      System.out.println("Autonomous complete!");
-      autonomousStartTime=null;
+    long difference = 0;
+    if (testStartTime==null) {
+      testStartTime = currentTime;
+    } else
+      difference = currentTime.getTime()-testStartTime.getTime();
+    //System.out.println("Elapsed time in test: "+difference);
+    if (!robotContainer.calibrate(testCount, difference)) {
+      System.out.println("Calibrate complete for:"+testCount);
+      testStartTime = null;
+      calibrateInProgress = false;
     }
   }
 }

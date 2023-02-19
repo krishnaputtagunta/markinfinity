@@ -11,17 +11,12 @@ public class AutonomousControllerImpl implements AutonomousController {
     ArrayList<Pair> speedMap = new ArrayList<Pair>(5);
     ArrayList<Pair> rotateMap = new ArrayList<Pair>(5);
     ArrayList<Pair> actionMap = new ArrayList<Pair>(25);
+    int calibrationsCount;
+    Pair[] calibrateSequence = new Pair[5];
 
     public AutonomousControllerImpl() {
-        speedMap.add(new Pair(1.0, 20)); // Speed value of 1.0 results in 20 inches/sec
-        speedMap.add(new Pair(0.5, 10));
-        speedMap.add(new Pair(0.25, 5));
-        speedMap.add(new Pair(0.05, 1));
-
-        rotateMap.add(new Pair(1.0, 30)); // rotate value of 1.0 results in 30 deg/sec
-        rotateMap.add(new Pair(0.5, 15));
-        rotateMap.add(new Pair(0.2, 5));
-        rotateMap.add(new Pair(0.06, 1));
+        initCalibrationSequence();
+        initMagnitudeToPhysicalMap();
     }
 
     @Override
@@ -78,7 +73,35 @@ public class AutonomousControllerImpl implements AutonomousController {
     }
 
     @Override
-    public Pair calibrate(long timeInTest) {
-        return null;
+    public Pair calibrate(int currentCalibration, long timeInCalibration) {
+        if (currentCalibration>calibrationsCount) 
+            return null;
+        else {
+            if (timeInCalibration<5000) 
+                return calibrateSequence[currentCalibration-1]; 
+            else
+                return new Pair(null, null, "Stop"); // Nothing more to do for this count
+        }
+    }
+
+    void initCalibrationSequence() {
+        calibrationsCount=0;
+        calibrateSequence[calibrationsCount++] = new Pair(1.0, null, "Move"); //Move for 5 sec at max speed
+        calibrateSequence[calibrationsCount++] = new Pair(0.5, null, "Move"); //Move for 5 sec at half speed
+        calibrateSequence[calibrationsCount++] = new Pair(1.0, null, "Turn"); //Turn for 5 sec at max speed
+        calibrateSequence[calibrationsCount++] = new Pair(0.5, null, "Turn"); //Turn for 5 sec at half speed
+    }
+
+    // Update these values after calibration
+    void initMagnitudeToPhysicalMap() {
+        speedMap.add(new Pair(1.0, 20)); // Speed value of 1.0 results in 20 inches/sec
+        speedMap.add(new Pair(0.5, 10));
+        speedMap.add(new Pair(0.25, 5));
+        speedMap.add(new Pair(0.05, 1));
+
+        rotateMap.add(new Pair(1.0, 30)); // rotate value of 1.0 results in 30 deg/sec
+        rotateMap.add(new Pair(0.5, 15));
+        rotateMap.add(new Pair(0.2, 5));
+        rotateMap.add(new Pair(0.06, 1));
     }
 }
